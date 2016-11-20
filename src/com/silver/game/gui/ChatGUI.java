@@ -62,7 +62,10 @@ public class ChatGUI extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String chatText = chatArea.getText();
-		chatArea.setText("");
-		messageArea.append(chatText+System.lineSeparator());
+		//makes sure that the chat box is empty, don't send blank messages
+		if (!chatText.isEmpty()){ 
+			chatArea.setText("");
+			messageArea.append(chatText+System.lineSeparator());
+		}
 	}
 }
