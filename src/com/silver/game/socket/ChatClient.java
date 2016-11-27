@@ -13,14 +13,22 @@ public class ChatClient {
 	private BufferedReader in;
     private PrintWriter out;
 	private JFrame frame;
-	
+	private Socket socket;
 	public ChatClient(JFrame frame){
 		this.frame = frame;
 		
 	}
-	
+	public void stopClient(){
+		if(socket.isConnected()){
+			try {
+				socket.close();
+			} catch (IOException e) {
+				//We know it will throw exception
+				System.out.println("Client was closed");
+			}
+		}
+	}
 	public void connectToServer(){
-		Socket socket = null;
 	       try {
 			// Get the server address from a dialog box.
 			String serverAddress = JOptionPane.showInputDialog(
@@ -35,13 +43,16 @@ public class ChatClient {
 			        new InputStreamReader(socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream(), true);
 
+			System.out.println("Waiting to read data");
 			// Consume the initial welcoming messages from the server
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 1; i++) {
 			    System.out.println(in.readLine() + "\n");
 			}
 		} catch (Exception e) {
 			System.out.println(e);
 			try {
+				in.close();
+				out.close();
 				socket.close();
 			} catch (IOException e1) {
 				System.out.print("Couldn't close socket");
