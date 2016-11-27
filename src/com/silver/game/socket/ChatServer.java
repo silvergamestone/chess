@@ -3,14 +3,18 @@ package com.silver.game.socket;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+import com.silver.game.gui.ChatGUI;
+
 public class ChatServer extends Thread{
 	
 	private boolean serverRunning;
 	private ServerSocket listener;
 	private ChatThread chatThread;
+	private ChatGUI chatGUI;
 	
-	public ChatServer(){
+	public ChatServer(ChatGUI chatGUI){
 		super();
+		this.chatGUI = chatGUI;
 	}
 	
 	@Override
@@ -31,12 +35,12 @@ public class ChatServer extends Thread{
 	private void startServer() {
 		serverRunning = true;
 
-		System.out.println("Listening for connections...");
+		chatGUI.sendToGUI("Listening for connections...");
 	    int clientNumber = 0;
 	    try {
 			listener = new ServerSocket(9898);	
 		} catch (IOException e1) {
-			System.out.println("Could not start the server...");
+			chatGUI.sendToGUI("Could not start the server...");
 			serverRunning = false;
 		}
 	    
@@ -47,10 +51,10 @@ public class ChatServer extends Thread{
             	chatThread.start();
 			} catch (IOException e) {
 				serverRunning = false;
-				System.out.println("Something else went wrong ...?");
+				chatGUI.sendToGUI("Something else went wrong ...?");
 			}
         }
-        System.out.println("The server doesn't want to talk anymore!");
+        chatGUI.sendToGUI("The server doesn't want to talk anymore!");
 	}
 	
 	public void sendMessage(String message){

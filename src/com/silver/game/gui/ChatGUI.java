@@ -90,6 +90,9 @@ public class ChatGUI extends JFrame implements ActionListener{
 		clientMenuItem.setEnabled(enabled);
 		stopMenuItem.setEnabled(!enabled);
 	}
+	public void sendToGUI(String message){
+		messageArea.append(message+System.lineSeparator());
+	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -102,18 +105,20 @@ public class ChatGUI extends JFrame implements ActionListener{
 				
 				if(chatServer != null){
 					chatServer.sendMessage(chatText);
+				}else if(chatClient != null){
+					chatClient.sendMessage(chatText);
 				}
 			}
 		}else if(e.getSource() == clientMenuItem){
 			chatClient = new ChatClient(this);
 			chatClient.connectToServer();
 			enableConnection(false);
-			System.out.println("Started as client...");
+			sendToGUI("Started as client...");
 		}else if(e.getSource() == serverMenuItem){
-			chatServer = new ChatServer();
+			chatServer = new ChatServer(this);
 			enableConnection(false);
 			chatServer.start();
-			System.out.println("Started as server...");
+			sendToGUI("Started as server...");
 		}else if(e.getSource() == stopMenuItem){
 			enableConnection(true);
 			if(chatServer != null){
