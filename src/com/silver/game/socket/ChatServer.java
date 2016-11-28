@@ -47,7 +47,7 @@ public class ChatServer extends Thread{
         while (serverRunning) {
             try {
             	//Any new connections will replace a preexisting connection
-            	chatThread = new ChatThread(listener.accept(), clientNumber++);
+            	chatThread = new ChatThread(listener.accept(), clientNumber++, chatGUI);
             	chatThread.start();
 			} catch (IOException e) {
 				serverRunning = false;

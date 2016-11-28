@@ -6,17 +6,21 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import com.silver.game.gui.ChatGUI;
+
 public class ChatThread extends Thread{
 	private Socket socket;
 	private int clientNumber;
 	private PrintWriter out;
+	private ChatGUI chatGUI;
 	
 	
-	public ChatThread(Socket socket, int clientNumber) {
+	public ChatThread(Socket socket, int clientNumber, ChatGUI chatGUI) {
 		super();
 		this.socket = socket;
 		this.clientNumber = clientNumber;
-		System.out.println("Connected to " + clientNumber);
+		this.chatGUI = chatGUI;
+		chatGUI.sendToGUI("Connected to " + clientNumber);
 	}
 	
 	public void sendMessage(String message){
@@ -38,16 +42,16 @@ public class ChatThread extends Thread{
 					break;
 				}*/
 				//out.println(input.toUpperCase());
-				System.out.println(input);
+				chatGUI.sendToGUI(input);
 			}
 		} catch (IOException e) {
-			System.out.println("Error handling client# " + clientNumber + ": " + e);
+			chatGUI.sendToGUI("Error handling client# " + clientNumber + ": " + e);
 		} finally {
 			 try {
                  socket.close();
-                 System.out.println("Connection with client " + clientNumber + " closed");
+                 chatGUI.sendToGUI("Connection with client " + clientNumber + " closed");
              } catch (IOException e) {
-            	 System.out.println("Couldn't close socket with client" + clientNumber);
+            	 chatGUI.sendToGUI("Couldn't close socket with client" + clientNumber);
              }
 		}
 	}

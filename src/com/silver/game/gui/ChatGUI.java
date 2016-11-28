@@ -110,7 +110,7 @@ public class ChatGUI extends JFrame implements ActionListener{
 				}
 			}
 		}else if(e.getSource() == clientMenuItem){
-			chatClient = new ChatClient(this);
+			chatClient = new ChatClient(this, this);
 			chatClient.connectToServer();
 			enableConnection(false);
 			sendToGUI("Started as client...");
