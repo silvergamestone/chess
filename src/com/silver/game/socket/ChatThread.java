@@ -45,7 +45,7 @@ public class ChatThread extends Thread{
 				chatGUI.sendToGUI(input);
 			}
 		} catch (IOException e) {
-			chatGUI.sendToGUI("Error handling client# " + clientNumber + ": " + e);
+			chatGUI.sendToGUI("Error handling client # " + clientNumber + ": " + e);
 		} finally {
 			 try {
                  socket.close();
