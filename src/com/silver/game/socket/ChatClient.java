@@ -13,8 +13,10 @@ public class ChatClient {
 	private JFrame frame;
 	private Socket socket;
 	private ChatGUI chatGUI;
+	private String name;
 	
-	public ChatClient(JFrame frame, ChatGUI chatGUI){
+	public ChatClient(JFrame frame, ChatGUI chatGUI, String nameo){
+		name = nameo;
 		this.frame = frame;
 		this.chatGUI = chatGUI;
 		
@@ -45,7 +47,7 @@ public class ChatClient {
 			// Make connection and initialize streams
 			socket = new Socket(serverAddress, 9898);
 			//-1 is saying that this is a client socket
-        	chatThread = new ChatThread(socket, -1, chatGUI);
+        	chatThread = new ChatThread(socket, -1, chatGUI, name);
         	chatThread.start();
         	
 		} catch (Exception e) {
@@ -59,7 +61,7 @@ public class ChatClient {
 	}
 	public void sendMessage(String message){
 		if(chatThread != null){
-			chatThread.sendMessage(message);
+			chatThread.sendMessage(message, name);
 		}
 	}
 }

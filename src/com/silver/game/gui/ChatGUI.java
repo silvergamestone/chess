@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -35,11 +36,16 @@ public class ChatGUI extends JFrame implements ActionListener{
 	private ChatServer chatServer;
 	private ChatClient chatClient;
 	private JButton chatButton;
+	private String name;
 	
 	public ChatGUI(){
 		super();
 		this.setTitle(title);
-		
+		name = JOptionPane.showInputDialog(
+			    this,
+			    "Name:",
+			    "Welcome to the Chat Program",
+			    JOptionPane.QUESTION_MESSAGE);
 		//Create the South Panel
 		JPanel southPanel = new JPanel(new BorderLayout());
 		
@@ -101,7 +107,7 @@ public class ChatGUI extends JFrame implements ActionListener{
 			//makes sure that the chat box is empty, don't send blank messages
 			if (!chatText.isEmpty()){ 
 				chatArea.setText("");
-				messageArea.append(chatText+System.lineSeparator());
+				messageArea.append(name + ": " + chatText+System.lineSeparator());
 				
 				if(chatServer != null){
 					chatServer.sendMessage(chatText);
@@ -110,12 +116,12 @@ public class ChatGUI extends JFrame implements ActionListener{
 				}
 			}
 		}else if(e.getSource() == clientMenuItem){
-			chatClient = new ChatClient(this, this);
+			chatClient = new ChatClient(this, this, name);
 			chatClient.connectToServer();
 			enableConnection(false);
 			sendToGUI("Started as client...");
 		}else if(e.getSource() == serverMenuItem){
-			chatServer = new ChatServer(this);
+			chatServer = new ChatServer(this, name);
 			enableConnection(false);
 			chatServer.start();
 			sendToGUI("Started as server...");

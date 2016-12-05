@@ -13,18 +13,23 @@ public class ChatThread extends Thread{
 	private int clientNumber;
 	private PrintWriter out;
 	private ChatGUI chatGUI;
+	private String name;
 	
-	
-	public ChatThread(Socket socket, int clientNumber, ChatGUI chatGUI) {
+	public ChatThread(Socket socket, int clientNumber, ChatGUI chatGUI, String nameo) {
 		super();
+		name = nameo;
 		this.socket = socket;
 		this.clientNumber = clientNumber;
 		this.chatGUI = chatGUI;
-		chatGUI.sendToGUI("Connected to " + clientNumber);
+		if(clientNumber == -1){
+			chatGUI.sendToGUI("Connected to server " + name);
+		}else{
+		chatGUI.sendToGUI("Connected to " + name + ", client number " + clientNumber);
+		}
 	}
 	
-	public void sendMessage(String message){
-		out.println(message);
+	public void sendMessage(String message, String name){
+		out.println(name + ": " + message);
 	}
 	
 	@Override
@@ -34,14 +39,8 @@ public class ChatThread extends Thread{
 					new InputStreamReader(socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream(), true);
 			
-			//out.println("Hey dude");
-			
 			while (true) {
 				String input = in.readLine();
-				/*if (input == null || input.equals(".")) {
-					break;
-				}*/
-				//out.println(input.toUpperCase());
 				chatGUI.sendToGUI(input);
 			}
 		} catch (IOException e) {

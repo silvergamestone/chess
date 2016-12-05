@@ -11,9 +11,11 @@ public class ChatServer extends Thread{
 	private ServerSocket listener;
 	private ChatThread chatThread;
 	private ChatGUI chatGUI;
+	private String name;
 	
-	public ChatServer(ChatGUI chatGUI){
+	public ChatServer(ChatGUI chatGUI, String nameo){
 		super();
+		name = nameo;
 		this.chatGUI = chatGUI;
 	}
 	
@@ -47,7 +49,7 @@ public class ChatServer extends Thread{
         while (serverRunning) {
             try {
             	//Any new connections will replace a preexisting connection
-            	chatThread = new ChatThread(listener.accept(), clientNumber++, chatGUI);
+            	chatThread = new ChatThread(listener.accept(), clientNumber++, chatGUI, name);
             	chatThread.start();
 			} catch (IOException e) {
 				serverRunning = false;
@@ -59,7 +61,7 @@ public class ChatServer extends Thread{
 	
 	public void sendMessage(String message){
 		if(chatThread != null){
-			chatThread.sendMessage(message);
+			chatThread.sendMessage(message, name);
 		}
 	}
 }
